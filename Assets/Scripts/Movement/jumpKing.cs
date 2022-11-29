@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class jumpKing : MonoBehaviour
 {
-    private float Move;
-    public float walkSpeed;
-    public bool isGrounded;
+    public float WalkSpeedBoostValue;
+    public float MaxSpeed;
+    protected float Move;
+    protected float walkSpeed;
+    protected bool isGrounded;
     private Rigidbody2D rb;
     public LayerMask groundMask;
 
@@ -15,13 +17,16 @@ public class jumpKing : MonoBehaviour
     public KeyCode right = KeyCode.D;
 
     public PhysicsMaterial2D bounceMat, normalMat;
-    public bool canJump = true;
-    public float jumpValue = 0.0f;
-    
+    protected bool canJump = true;
+    protected float jumpValue = 0;
+    public float MaxJumpValue = 15f;
+    public float MinimumJumpValue = 5f;
+
 
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        jumpValue = MinimumJumpValue;
     }
 
     void Update()
@@ -29,18 +34,14 @@ public class jumpKing : MonoBehaviour
         if (isGrounded && Input.GetKey(right))
         {
             transform.Translate(new Vector2(1, 0) * walkSpeed * Time.deltaTime);
-            walkSpeed += 0.1f;
             Move = 1 * walkSpeed / 10;
+            walkSpeed += WalkSpeedBoostValue;
         }
         if (isGrounded && Input.GetKey(left))
         {
             transform.Translate(new Vector2(-1, 0) * walkSpeed * Time.deltaTime);
-            walkSpeed += 0.1f;
             Move = -1 * walkSpeed / 10;
-        }
-        if (!Input.GetKey(right) && !Input.GetKey(left))
-        {
-            Move = 0;
+            walkSpeed += WalkSpeedBoostValue;
         }
         if (Move >= 1)
         {
@@ -50,26 +51,12 @@ public class jumpKing : MonoBehaviour
         {
             Move = -1;
         }
-        if (walkSpeed >= 10)
-        {
-            walkSpeed = 10;
-        }
-        if (walkSpeed <= -10)
-        {
-            walkSpeed = -10;
-        }
         if (Input.GetKeyUp(right) || Input.GetKeyUp(left))
         {
             walkSpeed = 2f;
         }
-        if (!isGrounded && walkSpeed > 0)
-        {
-            walkSpeed -= 0.01f;
-        }
-        if (!isGrounded && walkSpeed < 0)
-        {
-            walkSpeed += 0.01f;
-        }
+
+        WalkSpeedBoost();
 
         isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - 0.5f),
         new Vector2(0.9f, 0.4f), 0f, groundMask);
@@ -82,40 +69,57 @@ public class jumpKing : MonoBehaviour
         {
             rb.sharedMaterial = normalMat;
         }
-
         if(Input.GetKey(jumpbutton) && isGrounded && canJump)
         {
             jumpValue += 0.1f;
         }
-
         if(Input.GetKeyDown(jumpbutton) && isGrounded && canJump)
         {
             rb.velocity = new Vector2(0.0f, rb.velocity.y);
         }
-
-        if(jumpValue >= 10f && isGrounded)
+        if(jumpValue >= MaxJumpValue && isGrounded)
         {
             float tempx = Move * walkSpeed;
             float tempy = jumpValue;
             rb.velocity = new Vector2(tempx, tempy);
             Invoke("ResetJump", 0f);
         }
-
         if(Input.GetKeyUp(jumpbutton))
         {
             if(isGrounded)
             {
                 rb.velocity = new Vector2(Move * walkSpeed, jumpValue);
-                jumpValue = 5.0f;
+                Invoke("ResetJump", 0f);
             }
+        }
+        if (isGrounded)
+        {
             canJump = true;
+        }
+    }
+
+    void WalkSpeedBoost()
+    {
+        if (!isGrounded && Move >= 1 && canJump == true)
+        {
+            walkSpeed -= WalkSpeedBoostValue / 10;
+            transform.Translate(new Vector2(1, 0) * walkSpeed * Time.deltaTime);
+        }
+        if (!isGrounded && Move <= -1 && canJump == true)
+        {
+            walkSpeed -= WalkSpeedBoostValue / 10;
+            transform.Translate(new Vector2(-1, 0) * walkSpeed * Time.deltaTime);
+        }
+        if (walkSpeed >= MaxSpeed)
+        {
+            walkSpeed = MaxSpeed;
         }
     }
 
     void ResetJump()
     {
         canJump = false;
-        jumpValue = 5;
+        jumpValue = MinimumJumpValue;
     }
 
     void OnDrawGizmosSelected()
