@@ -22,6 +22,10 @@ public class jumpKing : MonoBehaviour
     public float MaxJumpValue = 15f;
     public float MinimumJumpValue = 5f;
 
+    public float IsGroundedCheckOffSet;
+    public float IsGroundedCheckSizeX;
+    public float IsGroundedCheckSizeY;
+
 
     void Start()
     {
@@ -34,13 +38,13 @@ public class jumpKing : MonoBehaviour
         if (isGrounded && Input.GetKey(right))
         {
             transform.Translate(new Vector2(1, 0) * walkSpeed * Time.deltaTime);
-            Move = 1 * walkSpeed / 10;
+            Move = 1 * walkSpeed;
             walkSpeed += WalkSpeedBoostValue;
         }
         if (isGrounded && Input.GetKey(left))
         {
             transform.Translate(new Vector2(-1, 0) * walkSpeed * Time.deltaTime);
-            Move = -1 * walkSpeed / 10;
+            Move = -1 * walkSpeed;
             walkSpeed += WalkSpeedBoostValue;
         }
         if (Move >= 1)
@@ -58,8 +62,8 @@ public class jumpKing : MonoBehaviour
 
         WalkSpeedBoost();
 
-        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - 0.5f),
-        new Vector2(0.9f, 0.4f), 0f, groundMask);
+        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - IsGroundedCheckOffSet),
+        new Vector2(IsGroundedCheckSizeX, IsGroundedCheckSizeY), 0f, groundMask);
 
         if(jumpValue > 0)
         {
@@ -125,6 +129,6 @@ public class jumpKing : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawCube(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - 0.5f), new Vector2(0.9f, 0.2f));
+        Gizmos.DrawCube(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - IsGroundedCheckOffSet), new Vector2(IsGroundedCheckSizeX, IsGroundedCheckSizeY));
     }
 }
