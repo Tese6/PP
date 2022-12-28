@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class jumpKing : MonoBehaviour
 {
+    public Animator MovementAnim;
     public float WalkSpeedBoostValue;
     public float MaxSpeed;
     protected float Move;
@@ -11,6 +12,9 @@ public class jumpKing : MonoBehaviour
     protected bool isGrounded;
     private Rigidbody2D rb;
     public LayerMask groundMask;
+
+    public float FallingThreshold = -0.1f;
+    public bool Falling = false;
 
     public KeyCode jumpbutton = KeyCode.Space;
     public KeyCode left = KeyCode.A;
@@ -40,12 +44,20 @@ public class jumpKing : MonoBehaviour
             transform.Translate(new Vector2(1, 0) * walkSpeed * Time.deltaTime);
             Move = 1 * walkSpeed;
             walkSpeed += WalkSpeedBoostValue;
+            transform.localScale = new Vector2(0.4f, 0.4f);
+            MovementAnim.SetBool("IsRunning", true);
         }
         if (isGrounded && Input.GetKey(left))
         {
             transform.Translate(new Vector2(-1, 0) * walkSpeed * Time.deltaTime);
             Move = -1 * walkSpeed;
             walkSpeed += WalkSpeedBoostValue;
+            transform.localScale = new Vector2(-0.4f, 0.4f);
+            MovementAnim.SetBool("IsRunning", true);
+        }
+        if(isGrounded && !Input.GetKey(right) && !Input.GetKey(left))
+        {
+            MovementAnim.SetBool("IsRunning", false);
         }
         if (Move >= 1)
         {
@@ -58,6 +70,23 @@ public class jumpKing : MonoBehaviour
         if (Input.GetKeyUp(right) || Input.GetKeyUp(left))
         {
             walkSpeed = 2f;
+        }
+        if (rb.velocity.y > FallingThreshold)
+        {
+            Falling = false;
+            MovementAnim.SetBool("IsFalling", false);
+            MovementAnim.SetBool("IsJumping", true);
+        }
+        if (rb.velocity.y < FallingThreshold)
+        {
+            Falling = true;
+            MovementAnim.SetBool("IsFalling", true);
+            MovementAnim.SetBool("IsJumping", false);
+        }
+        else
+        {
+            Falling = false;
+            MovementAnim.SetBool("IsFalling", false);
         }
 
         WalkSpeedBoost();
@@ -99,6 +128,7 @@ public class jumpKing : MonoBehaviour
         if (isGrounded)
         {
             canJump = true;
+            MovementAnim.SetBool("IsJumping", false);
         }
     }
 
