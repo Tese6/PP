@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 176412304726921751}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -238,6 +238,7 @@ MonoBehaviour:
   IsGroundedCheckOffSet: 0.11
   IsGroundedCheckSizeX: 0.1
   IsGroundedCheckSizeY: 0.03
+  PlayerHealth: 100
 --- !u!95 &176412304726921751
 Animator:
   serializedVersion: 3

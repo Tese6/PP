@@ -5,22 +5,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 public class GameController : MonoBehaviour
 {
-    public TextMeshProUGUI TimerText;
-    public float CurrentTime;
-    public bool CountingDown;
+    public static int PlayerGraphics;
+    public static int PlayerResolutionIndex;
+    public static float PlayerMasterVolume;
+    public static bool PlayerFullscreen;
     public AudioMixer MasterMixer;
-    [SerializeField] GameObject PauseMenu;
-    [SerializeField] GameObject FailMenu;
-    [SerializeField] GameObject OptionsMenu;
-    public int MenuID = 1;
-    public int LevelID = 0;
     Resolution[] Resolutions;
     public Dropdown ResolutionDropdown;
-    public KeyCode Pause = KeyCode.Escape;
-    public static bool Paused = false;
     void Start()
     {
         Resolutions = Screen.resolutions;
@@ -34,88 +29,28 @@ public class GameController : MonoBehaviour
             if (Resolutions[i].width == Screen.currentResolution.width && Resolutions[i].height == Screen.currentResolution.height)
             {
                 CurrentResolutionIndex = i;
+                PlayerResolutionIndex = i;
+
             }
         }
         ResolutionDropdown.AddOptions(Options);
         ResolutionDropdown.value = CurrentResolutionIndex;
         ResolutionDropdown.RefreshShownValue();
     }
-    void Update()
-    {
-        if (Input.GetKeyDown(Pause))
-        {
-            if (Paused == false)
-            {
-                pause();
-            }
-            else
-            {
-                resume();
-            }
-        }
-        CurrentTime = CountingDown ? CurrentTime -= Time.deltaTime : CurrentTime += Time.deltaTime;
-        TimerText.text = CurrentTime.ToString("0.00");
-    }
-    public void pause()
-    {
-        PauseMenu.SetActive(true);
-        Paused = true;
-        Time.timeScale = 0f;
-    }
-    public void resume()
-    {
-        PauseMenu.SetActive(false);
-        FailMenu.SetActive(false);
-        Time.timeScale = 1f;
-        Paused = false;
-    }
-    public void ReturnToMenu(int MenuID)
-    {
-        SceneManager.LoadScene(SceneManager.GetSceneAt(0).name);
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(MenuID);
-    }
-    public void fail()
-    {
-        FailMenu.SetActive(true);
-        Time.timeScale = 0f;
-    }
-    public void Restart()
-    {
-        FailMenu.SetActive(false);
-        PauseMenu.SetActive(false);
-        SceneManager.LoadScene(SceneManager.GetSceneAt(0).name);
-        Time.timeScale = 1f;
-    }
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-    public void Options()
-    {
-        OptionsMenu.SetActive(true);
-    }
     public void SetMasterVolume(float volume)
     {
         MasterMixer.SetFloat("MasterVolume", volume);
-    }
-    public void Play(int LevelID)
-    {
-        SceneManager.LoadScene(SceneManager.GetSceneAt(0).name);
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(LevelID);
-    }
-    public void CloseOptionsMenu()
-    {
-        OptionsMenu.SetActive(false);
+        PlayerMasterVolume = volume;
     }
     public void GraphicSettings(int QualityIndex)
     {
         QualitySettings.SetQualityLevel(QualityIndex);
+        PlayerGraphics = QualityIndex;
     }
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        PlayerFullscreen = isFullscreen;
     }
     public void SetResolution(int resolutionIndex)
     {

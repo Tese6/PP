@@ -29,17 +29,25 @@ public class jumpKing : MonoBehaviour
     public float IsGroundedCheckOffSet;
     public float IsGroundedCheckSizeX;
     public float IsGroundedCheckSizeY;
+    public float RestartXPosition;
+    public float RestartYPosition;
 
+    public static int PlayerHealth = 100;
+    public static bool Won = false;
+    public static bool OutOfBounds = false;
 
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         jumpValue = MinimumJumpValue;
+        PlayerHealth = 100;
+        Won = false;
+        OutOfBounds = false;
     }
 
     void Update()
     {
-        if (isGrounded && Input.GetKey(right))
+        if (isGrounded && Input.GetKey(right) && PlayerHealth > 0)
         {
             transform.Translate(new Vector2(1, 0) * walkSpeed * Time.deltaTime);
             Move = 1 * walkSpeed;
@@ -47,7 +55,7 @@ public class jumpKing : MonoBehaviour
             transform.localScale = new Vector2(0.4f, 0.4f);
             MovementAnim.SetBool("IsRunning", true);
         }
-        if (isGrounded && Input.GetKey(left))
+        if (isGrounded && Input.GetKey(left) && PlayerHealth > 0)
         {
             transform.Translate(new Vector2(-1, 0) * walkSpeed * Time.deltaTime);
             Move = -1 * walkSpeed;
@@ -55,7 +63,7 @@ public class jumpKing : MonoBehaviour
             transform.localScale = new Vector2(-0.4f, 0.4f);
             MovementAnim.SetBool("IsRunning", true);
         }
-        if(isGrounded && !Input.GetKey(right) && !Input.GetKey(left))
+        if(isGrounded && !Input.GetKey(right) && !Input.GetKey(left) && PlayerHealth > 0)
         {
             MovementAnim.SetBool("IsRunning", false);
         }
@@ -67,7 +75,7 @@ public class jumpKing : MonoBehaviour
         {
             Move = -1;
         }
-        if (Input.GetKeyUp(right) || Input.GetKeyUp(left))
+        if (Input.GetKeyUp(right) || Input.GetKeyUp(left) && PlayerHealth > 0)
         {
             walkSpeed = 2f;
         }
@@ -88,6 +96,13 @@ public class jumpKing : MonoBehaviour
             Falling = false;
             MovementAnim.SetBool("IsFalling", false);
         }
+        if (OutOfBounds == true)
+        {
+            gameObject.transform.position = new Vector2(RestartXPosition, RestartYPosition);
+            PlayerHealth = 100;
+            Won = false;
+            OutOfBounds = false;
+        }
 
         WalkSpeedBoost();
 
@@ -102,22 +117,22 @@ public class jumpKing : MonoBehaviour
         {
             rb.sharedMaterial = normalMat;
         }
-        if(Input.GetKey(jumpbutton) && isGrounded && canJump)
+        if(Input.GetKey(jumpbutton) && isGrounded && canJump && PlayerHealth > 0)
         {
             jumpValue += 0.1f;
         }
-        if(Input.GetKeyDown(jumpbutton) && isGrounded && canJump)
+        if(Input.GetKeyDown(jumpbutton) && isGrounded && canJump && PlayerHealth > 0)
         {
             rb.velocity = new Vector2(0.0f, rb.velocity.y);
         }
-        if(jumpValue >= MaxJumpValue && isGrounded)
+        if(jumpValue >= MaxJumpValue && isGrounded && PlayerHealth > 0)
         {
             float tempx = Move * walkSpeed;
             float tempy = jumpValue;
             rb.velocity = new Vector2(tempx, tempy);
             Invoke("ResetJump", 0f);
         }
-        if(Input.GetKeyUp(jumpbutton))
+        if(Input.GetKeyUp(jumpbutton) && PlayerHealth > 0)
         {
             if(isGrounded)
             {
@@ -125,10 +140,18 @@ public class jumpKing : MonoBehaviour
                 Invoke("ResetJump", 0f);
             }
         }
-        if (isGrounded)
+        if (isGrounded && PlayerHealth > 0)
         {
             canJump = true;
             MovementAnim.SetBool("IsJumping", false);
+        }
+        if (PlayerHealth <= 0)
+        {
+            MovementAnim.SetBool("Dead", true);
+        }
+        else
+        {
+            MovementAnim.SetBool("Dead", false);
         }
     }
 
@@ -160,5 +183,21 @@ public class jumpKing : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawCube(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - IsGroundedCheckOffSet), new Vector2(IsGroundedCheckSizeX, IsGroundedCheckSizeY));
+    }
+
+    void OnTriggerEnter2D(Collider2D enviroment)
+    {
+        if (enviroment.gameObject.tag == "EnviromentDanger")
+        {
+            PlayerHealth = 0;
+        }
+        if (enviroment.gameObject.tag == "Finish")
+        {
+            Won = true;
+        }
+        if (enviroment.gameObject.tag == "DeathZone")
+        {
+            OutOfBounds = true;
+        }
     }
 }

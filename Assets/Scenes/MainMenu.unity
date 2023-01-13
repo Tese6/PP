@@ -206,8 +206,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 314476625}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+      - m_Target: {fileID: 314476627}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
         m_MethodName: Options
         m_Mode: 1
         m_Arguments:
@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 156683593}
   - component: {fileID: 156683594}
   m_Layer: 0
-  m_Name: Slider
+  m_Name: VolumeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,6 +471,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 314476626}
+  - component: {fileID: 314476627}
   - component: {fileID: 314476625}
   m_Layer: 0
   m_Name: GameController
@@ -491,17 +492,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4817ddedfb2288b41b7ed3f7be83b472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimerText: {fileID: 0}
-  CurrentTime: 0
-  CountingDown: 0
   MasterMixer: {fileID: 24100000, guid: 377d4a570de4e5b4fab9b02e8c8aea6d, type: 2}
-  PauseMenu: {fileID: 0}
-  FailMenu: {fileID: 0}
-  OptionsMenu: {fileID: 1441337407}
-  MenuID: 1
-  LevelID: 0
   ResolutionDropdown: {fileID: 1136368738}
-  Pause: 27
 --- !u!4 &314476626
 Transform:
   m_ObjectHideFlags: 0
@@ -516,6 +508,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &314476627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314476624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9ad01a07fa708409a878a103b39d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Pause: 27
+  PauseMenu: {fileID: 0}
+  FailMenu: {fileID: 0}
+  OptionsMenu: {fileID: 1441337407}
 --- !u!1 &403082895
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,8 +607,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 314476625}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+      - m_Target: {fileID: 314476627}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -1391,8 +1399,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 314476625}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+      - m_Target: {fileID: 314476627}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
         m_MethodName: CloseOptionsMenu
         m_Mode: 1
         m_Arguments:
@@ -1835,7 +1843,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2075,8 +2083,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 314476625}
-        m_TargetAssemblyTypeName: GameController, Assembly-CSharp
+      - m_Target: {fileID: 314476627}
+        m_TargetAssemblyTypeName: ButtonHandler, Assembly-CSharp
         m_MethodName: Play
         m_Mode: 3
         m_Arguments:
@@ -3042,7 +3050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1441337408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3137,8 +3145,8 @@ RectTransform:
   m_Father: {fileID: 1876144805}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
