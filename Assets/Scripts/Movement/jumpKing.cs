@@ -75,10 +75,6 @@ public class jumpKing : MonoBehaviour
         {
             Move = -1;
         }
-        if (Input.GetKeyUp(right) || Input.GetKeyUp(left) && PlayerHealth > 0)
-        {
-            walkSpeed = 2f;
-        }
         if (rb.velocity.y > FallingThreshold)
         {
             Falling = false;

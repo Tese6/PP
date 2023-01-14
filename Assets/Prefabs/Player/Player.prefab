@@ -184,7 +184,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -233,12 +233,13 @@ MonoBehaviour:
   right: 100
   bounceMat: {fileID: 0}
   normalMat: {fileID: 0}
-  MaxJumpValue: 4
-  MinimumJumpValue: 1
+  MaxJumpValue: 5
+  MinimumJumpValue: 3
   IsGroundedCheckOffSet: 0.11
   IsGroundedCheckSizeX: 0.1
   IsGroundedCheckSizeY: 0.03
-  PlayerHealth: 100
+  RestartXPosition: 0
+  RestartYPosition: 0
 --- !u!95 &176412304726921751
 Animator:
   serializedVersion: 3
